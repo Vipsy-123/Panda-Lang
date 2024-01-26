@@ -2,6 +2,8 @@
     "files.associations": {
         "iosfwd": "cpp",
         "string": "cpp",
-        "__locale": "cpp"
+        "__locale": "cpp",
+        "optional": "cpp",
+        "iostream": "cpp"
     }
 }

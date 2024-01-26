@@ -3,3 +3,4 @@ enum class TokenType{
     digit,
     semi,
 };
+

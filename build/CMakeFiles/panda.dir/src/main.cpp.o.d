@@ -795,4 +795,5 @@ CMakeFiles/panda.dir/src/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__filesystem/u8path.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/sstream \
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/0.Read\ Panda\ File/ReadFile.h \
-  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/1.Lexer/TokenType.h
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/1.Lexer/TokenType.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/1.Lexer/Tokenizer.h
