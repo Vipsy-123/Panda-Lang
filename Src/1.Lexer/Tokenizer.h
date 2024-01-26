@@ -1,13 +1,10 @@
-#include<iostream>
-using namespace std;
-
 struct Token{
     TokenType type;
     optional<string> val;
 };
 
 class Lexer{
-    int curIdx;
+    size_t curIdx;
     string src;
 
     char peak(int ahead=1){
