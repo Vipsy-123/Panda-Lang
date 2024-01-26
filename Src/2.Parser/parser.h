@@ -2,9 +2,9 @@ class Parser{
     size_t curIdx;
     vector<Token> tokens;
 
-    optional<Token> peak(int ahead=1){
-        if(curIdx+ahead>tokens.size())return {};
-        return tokens[curIdx];
+    optional<Token>peek(int offset=0){
+        if(curIdx+offset>tokens.size())return {};
+        return tokens[curIdx+offset];
     }
     Token consume(){
         return tokens[curIdx++];
@@ -14,9 +14,26 @@ public:
         this->tokens=tokens;
         this->curIdx=curIdx;
     }
+    optional<NodeExpr> parseExpr(){
+        if(peek().has_value()&&peek().value().type==TokenType::digit){
+            return NodeExpr{.intLit=consume()};
+        }
+        return {};
+    }
     optional<NodeExit> parse(){
-        while(peak().has_value()){
-            
+        NodeExit exitNode;
+        while(peek().has_value()){
+            if(peek().value().type== TokenType::ret){
+                consume();
+                if(auto nodeExpr=parseExpr()){
+                    exitNode=NodeExit{.expr=nodeExpr.value()};
+                }
+                else {
+                    cerr<<"Invalid Expression...\n";
+                    exit(EXIT_FAILURE);
+                }
+            }
+
         }
     }
 
