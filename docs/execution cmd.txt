@@ -1,0 +1,12 @@
+in build dir -- $make
+             -- $./panda <input.pd>
+
+$cd ../test/outputFile
+
+in outputFile dir -- $nasm -f macho64 <file_name>.asm
+                  -- {$d test.o -o test -demangle -dynamic 
+                     -macos_version_min 11.0 -L/usr/local/lib 
+                     -syslibroot 
+                     /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk 
+                     -lSystem -no_pie}
+                  -- $./test
