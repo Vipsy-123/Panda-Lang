@@ -28,16 +28,26 @@ public:
             if(isalpha(peek())){
                 while(peek() && isalnum(peek()))buf.push_back(consume());
                 if(buf=="ret")tokens.push_back({.type=TokenType::ret});
-                else{
-                    cout<<"you messed up!";
-                    exit(EXIT_FAILURE);
-                }
+                if(buf=="let")tokens.push_back({.type=TokenType::let});
+                else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();
             }
             else if(isdigit(peek())){
                 while(peek() && isdigit(peek()))buf.push_back(consume());
                 tokens.push_back({.type=TokenType::digit,.val=buf});
                 buf.clear();
+            }
+            else if(peek()=='='){
+                tokens.push_back({.type=TokenType::equal});
+                consume();buf.clear();
+            }
+            else if(peek()=='('){
+                tokens.push_back({.type=TokenType::openParen});
+                consume();buf.clear();
+            }
+            else if(peek()==')'){
+                tokens.push_back({.type=TokenType::closeParen});
+                consume();buf.clear();
             }
             else if(peek()==';'){
                 tokens.push_back({.type=TokenType::semi});
@@ -49,7 +59,7 @@ public:
             else{
                 cout<<"you messed up!";
                 exit(EXIT_FAILURE);
-            }
+            } 
         }
         return tokens;
     }

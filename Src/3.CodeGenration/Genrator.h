@@ -1,15 +1,16 @@
 class Genrator{
-    optional<NodeExit>  root;
+    NodeProg root;
 public:
-    Genrator(optional<NodeExit> root){
+    Genrator(NodeProg root){
         this->root=root;
     }
     string Genrate(){
         stringstream output;
-        output<<"bits 64\nsection .text\nglobal _main\n\n";
-        output<<"_main:\n";
+        output<<"bglobal _main\n_main:\n";
+
+
         output<<"\tmov rax, 0x2000001\n";
-        output<<"\tmov rdi, "<<root.value().expr.intLit.val.value()<<"\n";
+        output<<"\tmov rdi, 0\n";
         output<<"\tsyscall\n";
         return output.str();
     }

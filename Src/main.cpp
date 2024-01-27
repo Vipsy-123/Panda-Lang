@@ -11,17 +11,17 @@ int pandaCompiler(const string &fileContents){
     vector<Token> tokens=lexer.tokenize();
 
     Parser parser(tokens);
-    optional<NodeExit>tree=parser.parse();
+    optional<NodeProg> tree=parser.parserProg();
 
     if(!tree.has_value()){
-        cerr<<"No exit statement"<<endl;
+        cerr<<"Could not parse"<<endl;
         exit(EXIT_FAILURE);
     }
 
-    Genrator genrator(tree);
-    string output=genrator.Genrate();
+    // Genrator genrator(tree);
+    // string output=genrator.Genrate();
 
-    writeAsmFile(output);
+    // writeAsmFile(output);
     return EXIT_SUCCESS;
 }
 
