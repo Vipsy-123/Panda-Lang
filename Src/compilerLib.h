@@ -12,3 +12,5 @@ using namespace std;
 
 #include"../src/2.Parser/ASTNode.h"
 #include"../src/2.Parser/parser.h"
+
+#include"../src/3.CodeGenration/Genrator.h"

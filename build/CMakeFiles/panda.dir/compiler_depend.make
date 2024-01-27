@@ -798,8 +798,13 @@ CMakeFiles/panda.dir/src/main.cpp.o: /Users/vishalghige/Desktop/\#C0DE/Panda-Lan
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/0.Read\ Panda\ File/ReadFile.h \
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/1.Lexer/TokenType.h \
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/1.Lexer/Tokenizer.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/2.Parser/ASTNode.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/2.Parser/parser.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/3.CodeGenration/Genrator.h \
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/compilerLib.h
 
+
+/Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/2.Parser/ASTNode.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/sys/_types/_uintptr_t.h:
 
@@ -2089,6 +2094,8 @@ CMakeFiles/panda.dir/src/main.cpp.o: /Users/vishalghige/Desktop/\#C0DE/Panda-Lan
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/bitset:
 
+/Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/2.Parser/parser.h:
+
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/_wctype.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/arm/_limits.h:
@@ -2194,6 +2201,8 @@ CMakeFiles/panda.dir/src/main.cpp.o: /Users/vishalghige/Desktop/\#C0DE/Panda-Lan
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__algorithm/find_end.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__algorithm/comp.h:
+
+/Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/3.CodeGenration/Genrator.h:
 
 /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/__algorithm/move.h:
 

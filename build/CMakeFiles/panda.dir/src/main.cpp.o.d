@@ -796,4 +796,7 @@ CMakeFiles/panda.dir/src/main.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk/usr/include/c++/v1/sstream \
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/0.Read\ Panda\ File/ReadFile.h \
   /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/1.Lexer/TokenType.h \
-  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/1.Lexer/Tokenizer.h
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/1.Lexer/Tokenizer.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/2.Parser/ASTNode.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/2.Parser/parser.h \
+  /Users/vishalghige/Desktop/\#C0DE/Panda-Lang/src/../src/3.CodeGenration/Genrator.h
