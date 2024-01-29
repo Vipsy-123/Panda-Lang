@@ -1,0 +1,3 @@
+/Users/vishalghige/Desktop/#C0DE/Panda-Lang/build/CMakeFiles/panda.dir
+/Users/vishalghige/Desktop/#C0DE/Panda-Lang/build/CMakeFiles/edit_cache.dir
+/Users/vishalghige/Desktop/#C0DE/Panda-Lang/build/CMakeFiles/rebuild_cache.dir
