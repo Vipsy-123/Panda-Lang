@@ -4,7 +4,13 @@ _main:
 	push rax,
 	mov rax, 20
 	push rax,
-	push QWORD[rsp + 0],
+	mov rax, 10
+	push rax,
+	mov rax, 40
+	push rax,
+	mov rax, 50
+	push rax,
+	push QWORD[rsp + 16],
 	mov rax, 0x2000001
 	pop rdi,
 	syscall
