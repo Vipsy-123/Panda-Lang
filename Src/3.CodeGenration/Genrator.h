@@ -13,7 +13,7 @@ public:
             Genrator* gen;
             void operator()(NodeExprIntLit intLit){
                 gen->output<<"\tmov rax, "<<intLit.intLit.val.value()<<"\n";
-                gen->output<<"\tpush rax\n";
+                gen->output<<"\tpush rdi \n";
             }
             void operator()(NodeExprIdent ident){
             
