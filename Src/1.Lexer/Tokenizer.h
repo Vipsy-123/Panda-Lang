@@ -28,7 +28,7 @@ public:
             if(isalpha(peek())){
                 while(peek() && isalnum(peek()))buf.push_back(consume());
                 if(buf=="ret")tokens.push_back({.type=TokenType::ret});
-                if(buf=="let")tokens.push_back({.type=TokenType::let});
+                else if(buf=="let")tokens.push_back({.type=TokenType::let});
                 else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();
             }

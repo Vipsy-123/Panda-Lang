@@ -18,10 +18,10 @@ int pandaCompiler(const string &fileContents){
         exit(EXIT_FAILURE);
     }
 
-    // Genrator genrator(tree);
-    // string output=genrator.Genrate();
+    Genrator genrator(tree.value());
+    string output=genrator.genProg();
 
-    // writeAsmFile(output);
+    writeAsmFile(output);
     return EXIT_SUCCESS;
 }
 
