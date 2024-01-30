@@ -25,48 +25,52 @@ public:
         stackSize--;
     }
     
-    void genExpr(NodeExpr expr){
+    void genExpr(NodeExpr* expr){
         struct ExprVisitor{
             Genrator* gen;
-            void operator()(NodeExprIntLit intLit){
-                gen->output<<"\tmov rax, "<<intLit.intLit.val.value()<<"\n";
+            void operator()(NodeExprIntLit* intLit){
+                gen->output<<"\tmov rax, "<<intLit->intLit.val.value()<<"\n";
                 gen->push("rax");
             }
-            void operator()(NodeExprIdent ident){
-                if(!gen->varsMap.contains(ident.ident.val.value())) {
-                    cerr<<"Undeclared identifier:"<<ident.ident.val.value()<<"\n";
+            void operator()(NodeExprIdent* ident){
+                if(!gen->varsMap.contains(ident->ident.val.value())) {
+                    cerr<<"Undeclared identifier:"<<ident->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
                 }  
                 stringstream offset;
-                auto loc=gen->varsMap[ident.ident.val.value()].stackLoc;
+                auto loc=gen->varsMap[ident->ident.val.value()].stackLoc;
                 offset<<"QWORD[rsp + "<<(gen->stackSize - loc-1)*8 << "]";
                 gen->push(offset.str()); 
             }
+            void operator()(NodeBinExpr* ident){
+                cout<<"yet to implement..."<<endl;
+                exit(EXIT_SUCCESS);
+            }
         };
         ExprVisitor vistor{.gen=this};
-        visit(vistor,expr.var);
+        visit(vistor,expr->var);
     }
 
-    void genStmts(NodeStmts stmts){
+    void genStmts(NodeStmts* stmts){
         struct StmtVisitor{
             Genrator* gen;
-            void operator()(NodeStmtsExit exitStmts){
-                gen->genExpr(exitStmts.expr);
+            void operator()(NodeStmtsExit* exitStmts){
+                gen->genExpr(exitStmts->expr);
                 gen->output<<"\tmov rax, 0x2000001\n";
                 gen->pop("rdi");
                 gen->output<<"\tsyscall\n";
             }
-            void operator()(NodeStmtsVar letStmts){
-                if(gen->varsMap.contains(letStmts.ident.val.value())){
-                    cerr<<"Identifier Value Already used."<<letStmts.ident.val.value()<<"\n";
+            void operator()(NodeStmtsVar* letStmts){
+                if(gen->varsMap.contains(letStmts->ident.val.value())){
+                    cerr<<"Identifier Value Already used."<<letStmts->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
                 }
-                gen->varsMap.insert({letStmts.ident.val.value(),Var{.stackLoc=gen->stackSize}});
-                gen->genExpr(letStmts.expr);
+                gen->varsMap.insert({letStmts->ident.val.value(),Var{.stackLoc=gen->stackSize}});
+                gen->genExpr(letStmts->expr);
             }
         };
         StmtVisitor visitor{.gen=this}; 
-        visit(visitor,stmts.var);
+        visit(visitor,stmts->var);
     }
 
     string genProg(){
@@ -74,7 +78,7 @@ public:
 
         for(auto stmt:root.stmts){
             genStmts(stmt);
-        }
+        } 
 
         output<<"\tmov rax, 0x2000001\n";
         output<<"\tmov rdi, 0\n";

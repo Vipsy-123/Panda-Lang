@@ -10,7 +10,7 @@ int readFile(const int argc, char* argv[],string &contents){
     while(argv[1][i]!='\0')i++;
     i--;
     if(argv[1][i-2]!='.'||argv[1][i-1]!='p'||argv[1][i]!='d'){
-        cerr<<"Incorrect file format. Requires a panda file <input.pd>\n";
+        cerr<<"Incorrect file format...\nRequires a panda file <input.pd>\n";
         return EXIT_FAILURE;
     }
     

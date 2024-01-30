@@ -1,6 +1,7 @@
 class Parser{
     size_t curIdx;
     vector<Token> tokens;
+    ArenaAllocator allocator;
 
     optional<Token>peek(int offset=0){
         if(curIdx+offset>=tokens.size())return {};
@@ -10,26 +11,34 @@ class Parser{
         return tokens[curIdx++];
     }
 public:
-    Parser(vector<Token> tokens){
+    Parser(vector<Token> tokens):allocator(1024*1024*4){
         this->tokens=tokens;
         this->curIdx=0;
     }
-    optional<NodeExpr> parseExpr(){
+    optional<NodeExpr*> parseExpr(){
         if(peek().has_value() && peek().value().type==TokenType::digit){
-            return NodeExpr{.var=NodeExprIntLit{.intLit=consume()}};
+            auto nodeExprIntLit=allocator.alloc<NodeExprIntLit>();
+            nodeExprIntLit->intLit=consume();
+            auto expr=allocator.alloc<NodeExpr>();
+            expr->var=nodeExprIntLit;
+            return expr;
         }
         if(peek().has_value() && peek().value().type==TokenType::ident){
-            return NodeExpr{.var=NodeExprIdent{.ident=consume()}};
+            auto nodeExprIdent=allocator.alloc<NodeExprIdent>();
+            nodeExprIdent->ident=consume();
+            auto expr=allocator.alloc<NodeExpr>();
+            expr->var=nodeExprIdent;
+            return expr;
         }
         return {};
     }
 
-    optional<NodeStmts> parseStmts(){
+    optional<NodeStmts*> parseStmts(){
         if(peek().value().type == TokenType::ret && peek(1).value().type == TokenType::openParen){
             consume();consume();
-            NodeStmtsExit exitStmts;
+            auto exitStmts=allocator.alloc<NodeStmtsExit>();
             if(auto nodeExpr=parseExpr()){
-                exitStmts={.expr=nodeExpr.value()};
+                exitStmts->expr=nodeExpr.value();
             }
             else {
                 cerr<<"Invalid Expression...\n";
@@ -48,7 +57,9 @@ public:
                 cerr<<"Expected ';'\n";
                 exit(EXIT_FAILURE);
             }
-            return NodeStmts{.var=exitStmts};
+            auto nodeStmt=allocator.alloc<NodeStmts>();
+            nodeStmt->var=exitStmts;
+            return nodeStmt;
         }
         else if(peek().has_value() &&
                 peek().value().type == TokenType::let &&
@@ -58,10 +69,11 @@ public:
                 peek(2).value().type == TokenType::equal)
         {
             consume();
-            auto varStmts=NodeStmtsVar{.ident=consume()};
+            auto varStmts=allocator.alloc<NodeStmtsVar>();
+            varStmts->ident=consume();
             consume();
             if(auto nodeExpr=parseExpr()){
-                varStmts.expr=nodeExpr.value();
+                varStmts->expr=nodeExpr.value();
             }
             else{
                 cerr<<"Invalid Experssion"<<endl;
@@ -73,7 +85,9 @@ public:
                 cerr<<"Expected ';'\n";
                 exit(EXIT_FAILURE);
             }
-            return NodeStmts{.var=varStmts};
+            auto stmt=allocator.alloc<NodeStmts>();
+            stmt->var=varStmts;
+            return stmt;
         }
         return {};
     }

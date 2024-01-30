@@ -1,16 +1,8 @@
 global _main
 _main:
-	mov rax, 10
+	mov rax, 29
 	push rax,
-	mov rax, 20
-	push rax,
-	mov rax, 10
-	push rax,
-	mov rax, 40
-	push rax,
-	mov rax, 50
-	push rax,
-	push QWORD[rsp + 16],
+	push QWORD[rsp + 0],
 	mov rax, 0x2000001
 	pop rdi,
 	syscall

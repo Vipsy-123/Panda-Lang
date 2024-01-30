@@ -1,6 +1,2 @@
-let x=10;
-let y=20;
-let z=10;
-let a=40;
-let b=50;
-ret(z);
+let x =29;
+ret(x);

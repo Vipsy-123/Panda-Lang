@@ -14,7 +14,7 @@ int pandaCompiler(const string &fileContents){
     vector<Token> tokens=lexer.tokenize();
 
     Parser parser(tokens);
-    optional<NodeProg> tree=parser.parserProg();
+    auto tree=parser.parserProg();
 
     if(!tree.has_value()){
         cerr<<"Could not parse"<<endl;
