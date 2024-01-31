@@ -41,6 +41,10 @@ public:
                 tokens.push_back({.type=TokenType::equal});
                 consume();buf.clear();
             }
+            else if(peek()=='+'){
+                tokens.push_back({.type=TokenType::plus});
+                consume();buf.clear();
+            }
             else if(peek()=='('){
                 tokens.push_back({.type=TokenType::openParen});
                 consume();buf.clear();

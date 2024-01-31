@@ -1,25 +1,26 @@
-struct NodeExprIntLit{
+struct NodeTermIntLit{
     Token intLit;
 };
-struct NodeExprIdent{
+struct NodeTermIdent{
     Token ident;
 };
 struct NodeExpr;
+
 struct NodeBinAdd{
-    NodeExpr* lhs;
-    NodeExpr* rhs;
-};
-struct NodeBinMul{
     NodeExpr* lhs;
     NodeExpr* rhs;
 };
 
 
 struct NodeBinExpr{
-    variant<NodeBinAdd*,NodeBinMul*> var;
+    NodeBinAdd* var;
 };
+struct NodeTerm{
+    variant<NodeTermIntLit*,NodeTermIdent*> var;
+};
+
 struct NodeExpr{
-    variant<NodeExprIntLit*,NodeExprIdent*,NodeBinExpr*> var;
+    variant<NodeTerm*,NodeBinExpr*> var;
 };
 
 struct NodeStmtsExit{

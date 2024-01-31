@@ -7,5 +7,6 @@ enum class TokenType{
     ident,
     let,
     equal,
+    plus,
 };
 

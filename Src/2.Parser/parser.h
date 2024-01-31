@@ -10,24 +10,91 @@ class Parser{
     Token consume(){
         return tokens[curIdx++];
     }
+    Token tryConsume(TokenType type,string errMsg){
+        if(peek().has_value() && peek().value().type==type){
+            return consume();
+        }
+        else{
+            cerr<<errMsg<<"\n";
+            exit(EXIT_FAILURE);
+        }
+    }
+    optional<Token> tryConsume(TokenType type){
+        if(peek().has_value() && peek().value().type==type){
+            return consume();
+        }
+        else{
+            return{};
+        }
+    }
 public:
     Parser(vector<Token> tokens):allocator(1024*1024*4){
         this->tokens=tokens;
         this->curIdx=0;
     }
-    optional<NodeExpr*> parseExpr(){
-        if(peek().has_value() && peek().value().type==TokenType::digit){
-            auto nodeExprIntLit=allocator.alloc<NodeExprIntLit>();
-            nodeExprIntLit->intLit=consume();
-            auto expr=allocator.alloc<NodeExpr>();
-            expr->var=nodeExprIntLit;
-            return expr;
+    optional<NodeBinExpr*>parserBinExpr(){
+        if(auto lhs=parseExpr()){
+            auto binExpr=allocator.alloc<NodeBinExpr>();
+            if(peek().has_value() && peek().value().type==TokenType::plus){
+                auto binExprAdd=allocator.alloc<NodeBinAdd>();
+                binExprAdd->lhs=lhs.value();
+                consume();
+                if(auto rhs=parseExpr()){
+                    binExprAdd->rhs=rhs.value();
+                    binExpr->var=binExprAdd;
+                    return binExpr;
+                }
+                else{
+                    cerr<<"Error in RHS."<<endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+            else{
+                cerr<<"Unsupported BinOp."<<endl;
+                exit(EXIT_FAILURE);
+            }
         }
-        if(peek().has_value() && peek().value().type==TokenType::ident){
-            auto nodeExprIdent=allocator.alloc<NodeExprIdent>();
-            nodeExprIdent->ident=consume();
+        return {};
+    }
+    optional<NodeTerm*> parseTerm(){
+        if(auto val=tryConsume(TokenType::digit)){
+            auto nodeTermIntLit=allocator.alloc<NodeTermIntLit>();
+            nodeTermIntLit->intLit=val.value();
+            auto term=allocator.alloc<NodeTerm>();
+            term->var=nodeTermIntLit;
+            return term;
+        }
+        if(auto val=tryConsume(TokenType::ident)){
+            auto nodeTermIdent=allocator.alloc<NodeTermIdent>();
+            nodeTermIdent->ident=val.value();
+            auto term=allocator.alloc<NodeTerm>();
+            term->var=nodeTermIdent;
+            return term;
+        }
+        return {};
+    }
+    optional<NodeExpr*> parseExpr(){
+        if(auto term=parseTerm()){
+            if(auto val=tryConsume(TokenType::plus)){
+                auto binExpr=allocator.alloc<NodeBinExpr>();
+                auto binExprAdd=allocator.alloc<NodeBinAdd>();
+                auto lhsExpr=allocator.alloc<NodeExpr>();
+                lhsExpr->var=term.value();
+                binExprAdd->lhs=lhsExpr;
+                if(auto rhs=parseExpr()){
+                    binExprAdd->rhs=rhs.value();
+                    binExpr->var=binExprAdd;
+                    auto expr=allocator.alloc<NodeExpr>();
+                    expr->var=binExpr;
+                    return expr;
+                }
+                else{
+                    cerr<<"Error in RHS."<<endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
             auto expr=allocator.alloc<NodeExpr>();
-            expr->var=nodeExprIdent;
+            expr->var=term.value();
             return expr;
         }
         return {};
@@ -44,19 +111,9 @@ public:
                 cerr<<"Invalid Expression...\n";
                 exit(EXIT_FAILURE);
             }
-            if(peek().has_value() && peek().value().type==TokenType::closeParen){
-            consume();
-            }
-            else{
-                cerr<<"Expected ')'\n";
-                exit(EXIT_FAILURE);
-            }
-            if(peek().has_value() && peek().value().type==TokenType::semi)
-                consume();
-            else{
-                cerr<<"Expected ';'\n";
-                exit(EXIT_FAILURE);
-            }
+            tryConsume(TokenType::closeParen,"Expexted ')'\n");
+            tryConsume(TokenType::semi,"Expexted ';'\n");
+            
             auto nodeStmt=allocator.alloc<NodeStmts>();
             nodeStmt->var=exitStmts;
             return nodeStmt;

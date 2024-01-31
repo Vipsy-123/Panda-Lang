@@ -24,27 +24,41 @@ public:
         output<<"\tpop "<<reg<<",\n";
         stackSize--;
     }
-    
-    void genExpr(NodeExpr* expr){
-        struct ExprVisitor{
+    void genTerm(NodeTerm* term){
+        struct TermVisitor{
             Genrator* gen;
-            void operator()(NodeExprIntLit* intLit){
-                gen->output<<"\tmov rax, "<<intLit->intLit.val.value()<<"\n";
+            void operator()(NodeTermIntLit* termIntLit){
+                gen->output<<"\tmov rax, "<<termIntLit->intLit.val.value()<<"\n";
                 gen->push("rax");
             }
-            void operator()(NodeExprIdent* ident){
-                if(!gen->varsMap.contains(ident->ident.val.value())) {
-                    cerr<<"Undeclared identifier:"<<ident->ident.val.value()<<"\n";
+            void operator()(NodeTermIdent* termIdent){
+                if(!gen->varsMap.contains(termIdent->ident.val.value())) {
+                    cerr<<"Undeclared identifier:"<<termIdent->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
                 }  
                 stringstream offset;
-                auto loc=gen->varsMap[ident->ident.val.value()].stackLoc;
+                auto loc=gen->varsMap[termIdent->ident.val.value()].stackLoc;
                 offset<<"QWORD[rsp + "<<(gen->stackSize - loc-1)*8 << "]";
-                gen->push(offset.str()); 
+                gen->push(offset.str());
             }
-            void operator()(NodeBinExpr* ident){
-                cout<<"yet to implement..."<<endl;
-                exit(EXIT_SUCCESS);
+        };
+
+        TermVisitor visitor{.gen=this};
+        visit(visitor,term->var);
+    }
+    void genExpr(NodeExpr* expr){
+        struct ExprVisitor{
+            Genrator* gen;
+            void operator()(NodeTerm* term){
+                gen->genTerm(term);
+            }
+            void operator()(NodeBinExpr* binExpr){
+                gen->genExpr(binExpr->var->lhs);
+                gen->genExpr(binExpr->var->rhs);
+                gen->pop("rax");
+                gen->pop("rbx");
+                gen->output<<"\tadd rax,rbx\n";
+                gen->push("rax");
             }
         };
         ExprVisitor vistor{.gen=this};
@@ -79,8 +93,8 @@ public:
         for(auto stmt:root.stmts){
             genStmts(stmt);
         } 
-
-        output<<"\tmov rax, 0x2000001\n";
+        
+        output<<"\n\tmov rax, 0x2000001\n";
         output<<"\tmov rdi, 0\n";
         output<<"\tsyscall\n";
         return output.str();
