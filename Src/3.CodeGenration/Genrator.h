@@ -46,6 +46,31 @@ public:
         TermVisitor visitor{.gen=this};
         visit(visitor,term->var);
     }
+    void genBin(NodeBinExpr* term){
+        struct BinOpVisitor{
+            Genrator* gen;
+            void operator()(NodeBinAdd* binExprAdd){
+                gen->genExpr(binExprAdd->lhs);
+                gen->genExpr(binExprAdd->rhs);
+                gen->pop("rax");
+                gen->pop("rbx");
+                gen->output<<"\tadd rax,rbx\n";
+                gen->push("rax");
+            }
+            void operator()(NodeBinMul* binExprMul){
+                gen->genExpr(binExprMul->lhs);
+                gen->genExpr(binExprMul->rhs);
+                gen->pop("rax");
+                gen->pop("rbx");
+                gen->output<<"\tmul rbx,\n";
+                gen->push("rax");
+            }
+        };
+
+        BinOpVisitor visitor{.gen=this};
+        visit(visitor,term->var);
+    }
+
     void genExpr(NodeExpr* expr){
         struct ExprVisitor{
             Genrator* gen;
@@ -53,12 +78,7 @@ public:
                 gen->genTerm(term);
             }
             void operator()(NodeBinExpr* binExpr){
-                gen->genExpr(binExpr->var->lhs);
-                gen->genExpr(binExpr->var->rhs);
-                gen->pop("rax");
-                gen->pop("rbx");
-                gen->output<<"\tadd rax,rbx\n";
-                gen->push("rax");
+                gen->genBin(binExpr);
             }
         };
         ExprVisitor vistor{.gen=this};
@@ -93,7 +113,7 @@ public:
         for(auto stmt:root.stmts){
             genStmts(stmt);
         } 
-        
+
         output<<"\n\tmov rax, 0x2000001\n";
         output<<"\tmov rdi, 0\n";
         output<<"\tsyscall\n";

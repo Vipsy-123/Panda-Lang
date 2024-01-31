@@ -21,9 +21,14 @@ _main:
 	pop rbx,
 	add rax,rbx
 	push rax,
-	mov rax, 9
+	push QWORD[rsp + 0],
+	mov rax, 4
 	push rax,
-	push QWORD[rsp + 8],
+	pop rax,
+	pop rbx,
+	mul rbx,
+	push rax,
+	push QWORD[rsp + 0],
 	mov rax, 0x2000001
 	pop rdi,
 	syscall

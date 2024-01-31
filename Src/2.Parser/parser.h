@@ -35,13 +35,25 @@ public:
     optional<NodeBinExpr*>parserBinExpr(){
         if(auto lhs=parseExpr()){
             auto binExpr=allocator.alloc<NodeBinExpr>();
-            if(peek().has_value() && peek().value().type==TokenType::plus){
+            if(auto val=tryConsume(TokenType::plus)){
                 auto binExprAdd=allocator.alloc<NodeBinAdd>();
                 binExprAdd->lhs=lhs.value();
-                consume();
                 if(auto rhs=parseExpr()){
                     binExprAdd->rhs=rhs.value();
                     binExpr->var=binExprAdd;
+                    return binExpr;
+                }
+                else{
+                    cerr<<"Error in RHS."<<endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+            if(auto val=tryConsume(TokenType::mul)){
+                auto binExprMul=allocator.alloc<NodeBinMul>();
+                binExprMul->lhs=lhs.value();
+                if(auto rhs=parseExpr()){
+                    binExprMul->rhs=rhs.value();
+                    binExpr->var=binExprMul;
                     return binExpr;
                 }
                 else{
@@ -84,6 +96,24 @@ public:
                 if(auto rhs=parseExpr()){
                     binExprAdd->rhs=rhs.value();
                     binExpr->var=binExprAdd;
+                    auto expr=allocator.alloc<NodeExpr>();
+                    expr->var=binExpr;
+                    return expr;
+                }
+                else{
+                    cerr<<"Error in RHS."<<endl;
+                    exit(EXIT_FAILURE);
+                }
+            }
+            if(auto val=tryConsume(TokenType::mul)){
+                auto binExpr=allocator.alloc<NodeBinExpr>();
+                auto binExprMul=allocator.alloc<NodeBinMul>();
+                auto lhsExpr=allocator.alloc<NodeExpr>();
+                lhsExpr->var=term.value();
+                binExprMul->lhs=lhsExpr;
+                if(auto rhs=parseExpr()){
+                    binExprMul->rhs=rhs.value();
+                    binExpr->var=binExprMul;
                     auto expr=allocator.alloc<NodeExpr>();
                     expr->var=binExpr;
                     return expr;

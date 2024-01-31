@@ -10,10 +10,14 @@ struct NodeBinAdd{
     NodeExpr* lhs;
     NodeExpr* rhs;
 };
-
+struct NodeBinMul{
+    NodeExpr* lhs;
+    NodeExpr* rhs;
+};
 
 struct NodeBinExpr{
-    NodeBinAdd* var;
+    variant<NodeBinAdd*,NodeBinMul*>var;
+    // NodeBinAdd* var;
 };
 struct NodeTerm{
     variant<NodeTermIntLit*,NodeTermIdent*> var;

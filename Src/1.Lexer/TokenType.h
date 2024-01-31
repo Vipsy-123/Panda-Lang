@@ -8,5 +8,6 @@ enum class TokenType{
     let,
     equal,
     plus,
+    mul,
 };
 
