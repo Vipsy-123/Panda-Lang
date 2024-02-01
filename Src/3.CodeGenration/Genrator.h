@@ -41,8 +41,10 @@ public:
                 offset<<"QWORD[rsp + "<<(gen->stackSize - loc-1)*8 << "]";
                 gen->push(offset.str());
             }
+            void operator()(NodeTermParen* expr){
+                gen->genExpr(expr->var);
+            }
         };
-
         TermVisitor visitor{.gen=this};
         visit(visitor,term->var);
     }
@@ -50,23 +52,38 @@ public:
         struct BinOpVisitor{
             Genrator* gen;
             void operator()(NodeBinAdd* binExprAdd){
-                gen->genExpr(binExprAdd->lhs);
                 gen->genExpr(binExprAdd->rhs);
+                gen->genExpr(binExprAdd->lhs);
                 gen->pop("rax");
                 gen->pop("rbx");
                 gen->output<<"\tadd rax,rbx\n";
                 gen->push("rax");
             }
             void operator()(NodeBinMul* binExprMul){
-                gen->genExpr(binExprMul->lhs);
                 gen->genExpr(binExprMul->rhs);
+                gen->genExpr(binExprMul->lhs);
                 gen->pop("rax");
                 gen->pop("rbx");
                 gen->output<<"\tmul rbx,\n";
                 gen->push("rax");
             }
+            void operator()(NodeBinDiv* binExprDiv){
+                gen->genExpr(binExprDiv->rhs);
+                gen->genExpr(binExprDiv->lhs);
+                gen->pop("rax");
+                gen->pop("rbx");
+                gen->output<<"\tdiv rbx,\n";
+                gen->push("rax");
+            }
+            void operator()(NodeBinSub* binExprSub){
+                gen->genExpr(binExprSub->rhs);
+                gen->genExpr(binExprSub->lhs);
+                gen->pop("rax");
+                gen->pop("rbx");
+                gen->output<<"\tsub rax,rbx\n";
+                gen->push("rax");
+            }
         };
-
         BinOpVisitor visitor{.gen=this};
         visit(visitor,term->var);
     }

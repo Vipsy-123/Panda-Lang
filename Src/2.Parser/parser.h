@@ -83,51 +83,77 @@ public:
             term->var=nodeTermIdent;
             return term;
         }
-        return {};
-    }
-    optional<NodeExpr*> parseExpr(){
-        if(auto term=parseTerm()){
-            if(auto val=tryConsume(TokenType::plus)){
-                auto binExpr=allocator.alloc<NodeBinExpr>();
-                auto binExprAdd=allocator.alloc<NodeBinAdd>();
-                auto lhsExpr=allocator.alloc<NodeExpr>();
-                lhsExpr->var=term.value();
-                binExprAdd->lhs=lhsExpr;
-                if(auto rhs=parseExpr()){
-                    binExprAdd->rhs=rhs.value();
-                    binExpr->var=binExprAdd;
-                    auto expr=allocator.alloc<NodeExpr>();
-                    expr->var=binExpr;
-                    return expr;
-                }
-                else{
-                    cerr<<"Error in RHS."<<endl;
-                    exit(EXIT_FAILURE);
-                }
+        if(auto val=tryConsume(TokenType::openParen)){
+            auto expr=parseExpr();
+            if(!expr.has_value()){
+                cerr<<"Expected Experssion\n";
+                exit(EXIT_FAILURE);
             }
-            if(auto val=tryConsume(TokenType::mul)){
-                auto binExpr=allocator.alloc<NodeBinExpr>();
-                auto binExprMul=allocator.alloc<NodeBinMul>();
-                auto lhsExpr=allocator.alloc<NodeExpr>();
-                lhsExpr->var=term.value();
-                binExprMul->lhs=lhsExpr;
-                if(auto rhs=parseExpr()){
-                    binExprMul->rhs=rhs.value();
-                    binExpr->var=binExprMul;
-                    auto expr=allocator.alloc<NodeExpr>();
-                    expr->var=binExpr;
-                    return expr;
-                }
-                else{
-                    cerr<<"Error in RHS."<<endl;
-                    exit(EXIT_FAILURE);
-                }
-            }
-            auto expr=allocator.alloc<NodeExpr>();
-            expr->var=term.value();
-            return expr;
+            tryConsume(TokenType::closeParen,"Expected ')'");
+            auto nodeTermParen=allocator.alloc<NodeTermParen>();
+            nodeTermParen->var=expr.value();
+            auto term=allocator.alloc<NodeTerm>();
+            term->var=nodeTermParen;
+            return term;
         }
         return {};
+    }
+    optional<NodeExpr*> parseExpr(int minPrec=0){
+
+        optional<NodeTerm*> lhs=parseTerm();
+        if(!lhs.has_value())return {};
+        auto lhsExpr=allocator.alloc<NodeExpr>();
+        lhsExpr->var=lhs.value();
+
+        while(1){
+            optional<Token> curToken=peek();
+            optional<int> prec;
+            if(curToken.has_value()){
+                prec=binOpPrec(curToken->type);
+                if(!prec||prec<minPrec)break;
+            }
+            else break;
+
+            Token op=consume();
+            int nextPrec=prec.value()+1;
+            auto rhsExpr=parseExpr(nextPrec);
+            if(!rhsExpr.has_value()){
+                cerr<<"unable to parse Expr\n";
+                exit(EXIT_FAILURE);
+            }
+            auto expr=allocator.alloc<NodeBinExpr>();
+            auto lhsExpr2=allocator.alloc<NodeExpr>();
+            if(op.type==TokenType::plus){
+                auto add=allocator.alloc<NodeBinAdd>();
+                lhsExpr2->var=lhsExpr->var;
+                add->lhs=lhsExpr2;
+                add->rhs=rhsExpr.value();
+                expr->var=add;
+            }
+            else if(op.type==TokenType::mul){
+                auto mul=allocator.alloc<NodeBinMul>();
+                lhsExpr2->var=lhsExpr->var;
+                mul->lhs=lhsExpr2;
+                mul->rhs=rhsExpr.value();
+                expr->var=mul;
+            }
+            else if(op.type==TokenType::sub){
+                auto sub=allocator.alloc<NodeBinSub>();
+                lhsExpr2->var=lhsExpr->var;
+                sub->lhs=lhsExpr2;
+                sub->rhs=rhsExpr.value();
+                expr->var=sub;
+            }
+            else if(op.type==TokenType::div){
+                auto div=allocator.alloc<NodeBinDiv>();
+                lhsExpr2->var=lhsExpr->var;
+                div->lhs=lhsExpr2;
+                div->rhs=rhsExpr.value();
+                expr->var=div;
+            }
+            lhsExpr->var=expr;
+        }
+        return lhsExpr;
     }
 
     optional<NodeStmts*> parseStmts(){

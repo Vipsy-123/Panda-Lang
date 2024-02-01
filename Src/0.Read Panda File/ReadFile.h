@@ -21,7 +21,6 @@ int readFile(const int argc, char* argv[],string &contents){
     contentsStream << input.rdbuf();
 
     contents=contentsStream.str();
-    // cout<<contents<<endl;
 
     return EXIT_SUCCESS;
 }

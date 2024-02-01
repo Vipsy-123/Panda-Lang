@@ -3,6 +3,17 @@ struct Token{
     optional<string> val;
 };
 
+optional<int> binOpPrec(TokenType type){
+    switch (type){
+    case TokenType::plus:return 1;
+    case TokenType::sub:return 1;
+    case TokenType::mul: return 2;
+    case TokenType::div: return 2;
+    default:
+        return{};
+    }
+}
+
 class Lexer{
     size_t curIdx;
     string src;
@@ -47,6 +58,14 @@ public:
             }
             else if(peek()=='*'){
                 tokens.push_back({.type=TokenType::mul});
+                consume();buf.clear();
+            }
+            else if(peek()=='/'){
+                tokens.push_back({.type=TokenType::div});
+                consume();buf.clear();
+            }
+            else if(peek()=='-'){
+                tokens.push_back({.type=TokenType::sub});
                 consume();buf.clear();
             }
             else if(peek()=='('){

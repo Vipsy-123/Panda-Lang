@@ -6,6 +6,10 @@ struct NodeTermIdent{
 };
 struct NodeExpr;
 
+struct NodeTermParen{
+    NodeExpr* var;
+};
+
 struct NodeBinAdd{
     NodeExpr* lhs;
     NodeExpr* rhs;
@@ -14,13 +18,22 @@ struct NodeBinMul{
     NodeExpr* lhs;
     NodeExpr* rhs;
 };
+struct NodeBinSub{
+    NodeExpr* lhs;
+    NodeExpr* rhs;
+};
+struct NodeBinDiv{
+    NodeExpr* lhs;
+    NodeExpr* rhs;
+};
 
 struct NodeBinExpr{
-    variant<NodeBinAdd*,NodeBinMul*>var;
+    variant<NodeBinAdd*,NodeBinMul*,NodeBinDiv*,NodeBinSub*>var;
     // NodeBinAdd* var;
 };
 struct NodeTerm{
-    variant<NodeTermIntLit*,NodeTermIdent*> var;
+    variant<NodeTermIntLit*,NodeTermIdent*,NodeTermParen*> var;
+    // NodeTermIntLit* var;
 };
 
 struct NodeExpr{

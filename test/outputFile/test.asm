@@ -1,32 +1,18 @@
 global _main
 _main:
-	mov rax, 1
+	mov rax, 2
 	push rax,
-	mov rax, 3
-	push rax,
-	mov rax, 4
-	push rax,
-	pop rax,
-	pop rbx,
-	add rax,rbx
-	push rax,
-	pop rax,
-	pop rbx,
-	add rax,rbx
-	push rax,
-	push QWORD[rsp + 0],
-	mov rax, 3
-	push rax,
-	pop rax,
-	pop rbx,
-	add rax,rbx
-	push rax,
-	push QWORD[rsp + 0],
-	mov rax, 4
+	mov rax, 20
 	push rax,
 	pop rax,
 	pop rbx,
 	mul rbx,
+	push rax,
+	mov rax, 120
+	push rax,
+	pop rax,
+	pop rbx,
+	sub rax,rbx
 	push rax,
 	push QWORD[rsp + 0],
 	mov rax, 0x2000001

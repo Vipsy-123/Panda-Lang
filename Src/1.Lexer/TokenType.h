@@ -9,5 +9,7 @@ enum class TokenType{
     equal,
     plus,
     mul,
+    sub,
+    div,
 };
 
