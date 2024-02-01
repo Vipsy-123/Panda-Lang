@@ -8,6 +8,7 @@
 
 [Term]      ->[Ident]
             ->[intLit]
+            ->([Expr])
 
 [BinExpr]   ->[Expr]+[Expr]  ....prec=1
             ->[Expr]-[Expr]  ....prec=1
