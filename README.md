@@ -9,10 +9,10 @@ Panda is a statically typed, compiled programming language that aims to balance 
 
 ### 1. Variables
 
-Variables are declared using the `let` keyword
+Variables are declared using the `let :` keyword followed by its data type.
 
 ```python
-digit x = 2;
+let: digit x = 2;
 ```
 
 ### 2. Data Types
@@ -20,8 +20,8 @@ digit x = 2;
 Panda supports two datatypes: digit and string. String implementation is currently under devleopment.
 
 ```python
-digit number = 27; 
-string name = "Vishal"
+let: digit number = 27; 
+let: string name = "Vishal";
 ```
 
 ### 3. Conditional Statements
@@ -44,7 +44,7 @@ panda offers both `for` and `while` loops.
 #### For Loop
 
 ```python
-for(var: Number i = 0; i<10; i = i +1 ){
+for(let: digit i = 0; i<10; i = i +1 ){
       #code block
 }
 ```
@@ -55,7 +55,6 @@ for(var: Number i = 0; i<10; i = i +1 ){
 while(1){
     #code block
 }
-    # code block
 ```
 
 ### 5. Functions
@@ -63,7 +62,7 @@ while(1){
 Define functions using the `func` keyword. You can specify parameters and return types.
 
 ```python
-digit add(digit x, digit y){
+fun add(digit x, digit y):digit{
     return x + y;
 }
 ```
