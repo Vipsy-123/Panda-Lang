@@ -1,6 +1,7 @@
 # Panda Lang
 
-Panda language is a compiled programming language that seeks to achieve a harmonious blend of simplicity and power. The compiler generates assembly code and utilizes the NASM assembler for execution.
+Panda language is a compiled programming language that aims to achieve blend of simplicity and power. 
+The compiler generates assembly code and utilizes the NASM assembler for execution.
 
 ## Tour of the Language
 
