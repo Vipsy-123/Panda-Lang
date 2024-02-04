@@ -6,9 +6,11 @@ public:
     size_t stackSize;  
 
     struct Var{
+        string name;
         size_t stackLoc;
     };
-    unordered_map<string,Var>varsMap;
+    vector<Var>varsMap {};
+    vector<size_t>scopeVar {};
 
     Genrator(NodeProg root){
         this->root=root;
@@ -24,6 +26,24 @@ public:
         output<<"\tpop "<<reg<<",\n";
         stackSize--;
     }
+    vector<Var>::iterator find(Var var){
+        for(auto it=varsMap.begin();it<varsMap.end();it++){
+            if((*it).name ==var.name)return it;  
+        }
+        return varsMap.end();
+    }
+    void scopeBegin(){
+        scopeVar.push_back(varsMap.size());
+    }
+    void scopeEnd(){
+        size_t popCount=varsMap.size()-scopeVar.back();
+        output<<"\tadd rsp,"<<popCount*8<<"\n";
+        stackSize-=popCount;
+        for(int i=0;i<popCount;i++){
+            varsMap.pop_back();
+        }
+        scopeVar.pop_back();
+    }
     void genTerm(NodeTerm* term){
         struct TermVisitor{
             Genrator* gen;
@@ -32,12 +52,13 @@ public:
                 gen->push("rax");
             }
             void operator()(NodeTermIdent* termIdent){
-                if(!gen->varsMap.contains(termIdent->ident.val.value())) {
-                    cerr<<"Undeclared identifier:"<<termIdent->ident.val.value()<<"\n";
+                auto it=gen->find({.name=termIdent->ident.val.value()});
+                if(it==gen->varsMap.end()){
+                    cerr<<"Undeclared identifier: "<<termIdent->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
-                }  
+                }
                 stringstream offset;
-                auto loc=gen->varsMap[termIdent->ident.val.value()].stackLoc;
+                auto loc=(*it).stackLoc;
                 offset<<"QWORD[rsp + "<<(gen->stackSize - loc-1)*8 << "]";
                 gen->push(offset.str());
             }
@@ -112,12 +133,18 @@ public:
                 gen->output<<"\tsyscall\n";
             }
             void operator()(NodeStmtsVar* letStmts){
-                if(gen->varsMap.contains(letStmts->ident.val.value())){
+                auto it=gen->find({.name=letStmts->ident.val.value()});
+                if(it!=gen->varsMap.end()){
                     cerr<<"Identifier Value Already used."<<letStmts->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
                 }
-                gen->varsMap.insert({letStmts->ident.val.value(),Var{.stackLoc=gen->stackSize}});
+                gen->varsMap.push_back({.name=letStmts->ident.val.value(),.stackLoc=gen->stackSize});
                 gen->genExpr(letStmts->expr);
+            }
+            void operator()(NodeStmtScope* scope){
+                gen->scopeBegin();
+                for(NodeStmts* stmts: scope->stmts)gen->genStmts(stmts);
+                gen->scopeEnd();
             }
         };
         StmtVisitor visitor{.gen=this}; 

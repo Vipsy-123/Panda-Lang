@@ -202,6 +202,16 @@ public:
             stmt->var=varStmts;
             return stmt;
         }
+        if(tryConsume(TokenType::openCurly)){
+            auto scopeStmts=allocator.alloc<NodeStmtScope>();
+            while(auto stmt=parseStmts()){
+                scopeStmts->stmts.push_back(stmt.value());
+            }
+            tryConsume(TokenType::closeCurly,"Expected '}'");
+            auto stmt=allocator.alloc<NodeStmts>();
+            stmt->var=scopeStmts;
+            return stmt;
+        }
         return {};
     }
     
@@ -212,7 +222,7 @@ public:
                 prog.stmts.push_back(stmt.value());
             }
             else{
-                cerr<<"Invalid Statement1\n";
+                cerr<<"Invalid Statement\n";
                 exit(EXIT_FAILURE);
             }
         }

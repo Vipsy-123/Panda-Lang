@@ -48,9 +48,13 @@ struct NodeStmtsVar{
     NodeExpr* expr;
 
 };
+struct NodeStmts;
+struct NodeStmtScope{
+   vector<NodeStmts*> stmts;
+};
 
 struct NodeStmts{
-    variant<NodeStmtsExit*, NodeStmtsVar*> var;
+    variant<NodeStmtsExit*, NodeStmtsVar*,NodeStmtScope*> var;
 };
 struct NodeProg{
     vector<NodeStmts*> stmts;

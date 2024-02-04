@@ -76,6 +76,14 @@ public:
                 tokens.push_back({.type=TokenType::closeParen});
                 consume();buf.clear();
             }
+            else if(peek()=='{'){
+                tokens.push_back({.type=TokenType::openCurly});
+                consume();buf.clear();
+            }
+            else if(peek()=='}'){
+                tokens.push_back({.type=TokenType::closeCurly});
+                consume();buf.clear();
+            }
             else if(peek()==';'){
                 tokens.push_back({.type=TokenType::semi});
                 consume();buf.clear();

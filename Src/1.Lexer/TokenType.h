@@ -11,5 +11,7 @@ enum class TokenType{
     mul,
     sub,
     div,
+    openCurly,
+    closeCurly,
 };
 
