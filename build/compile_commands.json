@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/Users/vishalghige/Desktop/#C0DE/Panda-Lang/build",
-  "command": "/usr/bin/clang++   -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.2.sdk -o CMakeFiles/panda.dir/src/main.cpp.o -c \"/Users/vishalghige/Desktop/#C0DE/Panda-Lang/src/main.cpp\"",
-  "file": "/Users/vishalghige/Desktop/#C0DE/Panda-Lang/src/main.cpp",
-  "output": "CMakeFiles/panda.dir/src/main.cpp.o"
-}
-]
