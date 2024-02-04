@@ -14,7 +14,7 @@ let: digit x = 2;
 
 ### 2. Data Types
 
-Panda supports two datatypes: `digit` and `string`. String implementation is currently under devleopment.
+Panda supports two datatypes : `digit` and `string`. String implementation is currently under devleopment.
 
 ```python
 let: digit number = 27; 
