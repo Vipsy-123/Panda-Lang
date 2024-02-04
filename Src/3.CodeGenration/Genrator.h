@@ -4,6 +4,7 @@ public:
     NodeProg root;
     stringstream output;  
     size_t stackSize;  
+    int labelCount;
 
     struct Var{
         string name;
@@ -15,6 +16,7 @@ public:
     Genrator(NodeProg root){
         this->root=root;
         stackSize=0;
+        labelCount=0;
         varsMap={};
         output<<"";
     }
@@ -44,68 +46,71 @@ public:
         }
         scopeVar.pop_back();
     }
+    string getLabel(){
+        return "label_"+to_string(labelCount);
+    }
     void genTerm(NodeTerm* term){
         struct TermVisitor{
-            Genrator* gen;
+            Genrator& gen;
             void operator()(NodeTermIntLit* termIntLit){
-                gen->output<<"\tmov rax, "<<termIntLit->intLit.val.value()<<"\n";
-                gen->push("rax");
+                gen.output<<"\tmov rax, "<<termIntLit->intLit.val.value()<<"\n";
+                gen.push("rax");
             }
             void operator()(NodeTermIdent* termIdent){
-                auto it=gen->find({.name=termIdent->ident.val.value()});
-                if(it==gen->varsMap.end()){
+                auto it=gen.find({.name=termIdent->ident.val.value()});
+                if(it==gen.varsMap.end()){
                     cerr<<"Undeclared identifier: "<<termIdent->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
                 }
                 stringstream offset;
                 auto loc=(*it).stackLoc;
-                offset<<"QWORD[rsp + "<<(gen->stackSize - loc-1)*8 << "]";
-                gen->push(offset.str());
+                offset<<"QWORD[rsp + "<<(gen.stackSize - loc-1)*8 << "]";
+                gen.push(offset.str());
             }
             void operator()(NodeTermParen* expr){
-                gen->genExpr(expr->var);
+                gen.genExpr(expr->var);
             }
         };
-        TermVisitor visitor{.gen=this};
+        TermVisitor visitor{.gen=*this};
         visit(visitor,term->var);
     }
     void genBin(NodeBinExpr* term){
         struct BinOpVisitor{
-            Genrator* gen;
+            Genrator& gen;
             void operator()(NodeBinAdd* binExprAdd){
-                gen->genExpr(binExprAdd->rhs);
-                gen->genExpr(binExprAdd->lhs);
-                gen->pop("rax");
-                gen->pop("rbx");
-                gen->output<<"\tadd rax,rbx\n";
-                gen->push("rax");
+                gen.genExpr(binExprAdd->rhs);
+                gen.genExpr(binExprAdd->lhs);
+                gen.pop("rax");
+                gen.pop("rbx");
+                gen.output<<"\tadd rax,rbx\n";
+                gen.push("rax");
             }
             void operator()(NodeBinMul* binExprMul){
-                gen->genExpr(binExprMul->rhs);
-                gen->genExpr(binExprMul->lhs);
-                gen->pop("rax");
-                gen->pop("rbx");
-                gen->output<<"\tmul rbx,\n";
-                gen->push("rax");
+                gen.genExpr(binExprMul->rhs);
+                gen.genExpr(binExprMul->lhs);
+                gen.pop("rax");
+                gen.pop("rbx");
+                gen.output<<"\tmul rbx,\n";
+                gen.push("rax");
             }
             void operator()(NodeBinDiv* binExprDiv){
-                gen->genExpr(binExprDiv->rhs);
-                gen->genExpr(binExprDiv->lhs);
-                gen->pop("rax");
-                gen->pop("rbx");
-                gen->output<<"\tdiv rbx,\n";
-                gen->push("rax");
+                gen.genExpr(binExprDiv->rhs);
+                gen.genExpr(binExprDiv->lhs);
+                gen.pop("rax");
+                gen.pop("rbx");
+                gen.output<<"\tdiv rbx,\n";
+                gen.push("rax");
             }
             void operator()(NodeBinSub* binExprSub){
-                gen->genExpr(binExprSub->rhs);
-                gen->genExpr(binExprSub->lhs);
-                gen->pop("rax");
-                gen->pop("rbx");
-                gen->output<<"\tsub rax,rbx\n";
-                gen->push("rax");
+                gen.genExpr(binExprSub->rhs);
+                gen.genExpr(binExprSub->lhs);
+                gen.pop("rax");
+                gen.pop("rbx");
+                gen.output<<"\tsub rax,rbx\n";
+                gen.push("rax");
             }
         };
-        BinOpVisitor visitor{.gen=this};
+        BinOpVisitor visitor{.gen=*this};
         visit(visitor,term->var);
     }
 
@@ -123,31 +128,44 @@ public:
         visit(vistor,expr->var);
     }
 
+    void genScope(NodeScope* scope){
+        scopeBegin();
+        for(NodeStmts* stmts: scope->stmts)genStmts(stmts);
+        scopeEnd();
+    }
+
     void genStmts(NodeStmts* stmts){
         struct StmtVisitor{
-            Genrator* gen;
+            Genrator& gen;
             void operator()(NodeStmtsExit* exitStmts){
-                gen->genExpr(exitStmts->expr);
-                gen->output<<"\tmov rax, 0x2000001\n";
-                gen->pop("rdi");
-                gen->output<<"\tsyscall\n";
+                gen.genExpr(exitStmts->expr);
+                gen.output<<"\tmov rax, 0x2000001\n";
+                gen.pop("rdi");
+                gen.output<<"\tsyscall\n";
             }
             void operator()(NodeStmtsVar* letStmts){
-                auto it=gen->find({.name=letStmts->ident.val.value()});
-                if(it!=gen->varsMap.end()){
+                auto it=gen.find({.name=letStmts->ident.val.value()});
+                if(it!=gen.varsMap.end()){
                     cerr<<"Identifier Value Already used."<<letStmts->ident.val.value()<<"\n";
                     exit(EXIT_FAILURE);
                 }
-                gen->varsMap.push_back({.name=letStmts->ident.val.value(),.stackLoc=gen->stackSize});
-                gen->genExpr(letStmts->expr);
+                gen.varsMap.push_back({.name=letStmts->ident.val.value(),.stackLoc=gen.stackSize});
+                gen.genExpr(letStmts->expr);
             }
-            void operator()(NodeStmtScope* scope){
-                gen->scopeBegin();
-                for(NodeStmts* stmts: scope->stmts)gen->genStmts(stmts);
-                gen->scopeEnd();
+            void operator()(NodeScope* scope){
+                gen.genScope(scope);
+            }
+            void operator()(NodeIf* ifStmt){
+                gen.genExpr(ifStmt->expr);
+                auto label=gen.getLabel();
+                gen.pop("rax");
+                gen.output<<"\ttest rax,rax\n";
+                gen.output<<"\tjz "<<label<<"\n";
+                gen.genScope(ifStmt->scope);
+                gen.output<<label<<":\n";
             }
         };
-        StmtVisitor visitor{.gen=this}; 
+        StmtVisitor visitor{.gen=*this}; 
         visit(visitor,stmts->var);
     }
 

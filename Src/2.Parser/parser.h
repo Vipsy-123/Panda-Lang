@@ -14,18 +14,14 @@ class Parser{
         if(peek().has_value() && peek().value().type==type){
             return consume();
         }
-        else{
-            cerr<<errMsg<<"\n";
-            exit(EXIT_FAILURE);
-        }
+        cerr<<errMsg<<"\n";
+        exit(EXIT_FAILURE);
     }
     optional<Token> tryConsume(TokenType type){
         if(peek().has_value() && peek().value().type==type){
             return consume();
         }
-        else{
-            return{};
-        }
+        return{};
     }
 public:
     Parser(vector<Token> tokens):allocator(1024*1024*4){
@@ -48,7 +44,7 @@ public:
                     exit(EXIT_FAILURE);
                 }
             }
-            if(auto val=tryConsume(TokenType::mul)){
+            if(auto val=tryConsume(TokenType::star)){
                 auto binExprMul=allocator.alloc<NodeBinMul>();
                 binExprMul->lhs=lhs.value();
                 if(auto rhs=parseExpr()){
@@ -130,21 +126,21 @@ public:
                 add->rhs=rhsExpr.value();
                 expr->var=add;
             }
-            else if(op.type==TokenType::mul){
+            else if(op.type==TokenType::star){
                 auto mul=allocator.alloc<NodeBinMul>();
                 lhsExpr2->var=lhsExpr->var;
                 mul->lhs=lhsExpr2;
                 mul->rhs=rhsExpr.value();
                 expr->var=mul;
             }
-            else if(op.type==TokenType::sub){
+            else if(op.type==TokenType::minus){
                 auto sub=allocator.alloc<NodeBinSub>();
                 lhsExpr2->var=lhsExpr->var;
                 sub->lhs=lhsExpr2;
                 sub->rhs=rhsExpr.value();
                 expr->var=sub;
             }
-            else if(op.type==TokenType::div){
+            else if(op.type==TokenType::fslash){
                 auto div=allocator.alloc<NodeBinDiv>();
                 lhsExpr2->var=lhsExpr->var;
                 div->lhs=lhsExpr2;
@@ -154,6 +150,17 @@ public:
             lhsExpr->var=expr;
         }
         return lhsExpr;
+    }
+    optional<NodeScope*> parseScope(){
+
+        if(!tryConsume(TokenType::openCurly).has_value())return {};
+
+        auto scopeStmts=allocator.alloc<NodeScope>();
+        while(auto stmt=parseStmts()){
+            scopeStmts->stmts.push_back(stmt.value());
+        }
+        tryConsume(TokenType::closeCurly,"Expected '}'");
+        return scopeStmts;
     }
 
     optional<NodeStmts*> parseStmts(){
@@ -202,15 +209,34 @@ public:
             stmt->var=varStmts;
             return stmt;
         }
-        if(tryConsume(TokenType::openCurly)){
-            auto scopeStmts=allocator.alloc<NodeStmtScope>();
-            while(auto stmt=parseStmts()){
-                scopeStmts->stmts.push_back(stmt.value());
+        if(peek().has_value() && peek().value().type==TokenType::openCurly){
+            if(auto scope=parseScope()){
+                auto stmt=allocator.alloc<NodeStmts>();
+                stmt->var=scope.value();
+                return stmt;
             }
-            tryConsume(TokenType::closeCurly,"Expected '}'");
-            auto stmt=allocator.alloc<NodeStmts>();
-            stmt->var=scopeStmts;
-            return stmt;
+            cerr<<"Invalid ScopeExpr\n";
+            exit(EXIT_FAILURE);
+        }
+        if(auto if_ =tryConsume(TokenType::if_)){
+            tryConsume(TokenType::openParen,"Expected '('");
+            auto ifStmt=allocator.alloc<NodeIf>();
+            if(auto exp=parseExpr()){
+                ifStmt->expr=exp.value();
+            }
+            else {
+                cerr<<"Invalid Expr\n";
+                exit(EXIT_FAILURE);
+            }
+            tryConsume(TokenType::closeParen,"Expected ')'");
+            if(auto scope=parseScope()){
+                ifStmt->scope=scope.value();
+                auto stmt=allocator.alloc<NodeStmts>();
+                stmt->var=ifStmt;
+                return stmt;
+            }
+            cerr<<"Invalid Scope\n";
+            exit(EXIT_FAILURE);
         }
         return {};
     }

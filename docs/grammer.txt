@@ -1,7 +1,11 @@
-[prog]      ->[stmts]*
+[Prog]      ->[Stmts]*
 
-[stmts]     ->[let indent =[Expr]];
+[Stmts]     ->[let indent =[Expr]];
             ->[exit([Expr])];
+            ->[Scope]
+            ->if([Expr])[Scope]
+
+[Scope]     ->{[Stmts]}
 
 [Expr]      ->[Term]
             ->[BinExpr]

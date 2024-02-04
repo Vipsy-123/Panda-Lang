@@ -8,10 +8,11 @@ enum class TokenType{
     let,
     equal,
     plus,
-    mul,
-    sub,
-    div,
+    star,
+    minus,
+    fslash,
     openCurly,
     closeCurly,
+    if_,
 };
 

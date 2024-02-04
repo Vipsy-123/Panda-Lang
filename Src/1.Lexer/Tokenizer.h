@@ -5,10 +5,10 @@ struct Token{
 
 optional<int> binOpPrec(TokenType type){
     switch (type){
-    case TokenType::plus:return 1;
-    case TokenType::sub:return 1;
-    case TokenType::mul: return 2;
-    case TokenType::div: return 2;
+    case TokenType::plus:
+    case TokenType::minus:return 1;
+    case TokenType::star: 
+    case TokenType::fslash: return 2;
     default:
         return{};
     }
@@ -40,6 +40,7 @@ public:
                 while(peek() && isalnum(peek()))buf.push_back(consume());
                 if(buf=="ret")tokens.push_back({.type=TokenType::ret});
                 else if(buf=="let")tokens.push_back({.type=TokenType::let});
+                else if(buf=="if")tokens.push_back({.type=TokenType::if_});
                 else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();
             }
@@ -57,15 +58,15 @@ public:
                 consume();buf.clear();
             }
             else if(peek()=='*'){
-                tokens.push_back({.type=TokenType::mul});
+                tokens.push_back({.type=TokenType::star});
                 consume();buf.clear();
             }
             else if(peek()=='/'){
-                tokens.push_back({.type=TokenType::div});
+                tokens.push_back({.type=TokenType::fslash});
                 consume();buf.clear();
             }
             else if(peek()=='-'){
-                tokens.push_back({.type=TokenType::sub});
+                tokens.push_back({.type=TokenType::minus});
                 consume();buf.clear();
             }
             else if(peek()=='('){
