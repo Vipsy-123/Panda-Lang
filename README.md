@@ -1,6 +1,6 @@
 # Panda Lang
 
-Panda is a statically typed, compiled programming language that aims to balance simplicity and power. It was created with the following principles in mind:
+Panda language is a compiled programming language that seeks to achieve a harmonious blend of simplicity and power. The compiler generates assembly code and utilizes the NASM assembler for execution.
 
 ## Tour of the Language
 
@@ -36,7 +36,7 @@ else{
 
 ### 4. Loops
 
-panda offers both `for` and `while` loops.
+Panda offers both `for` and `while` loops.
 
 #### For Loop
 
