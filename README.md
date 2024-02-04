@@ -18,7 +18,8 @@ Executable will be `./panda <file.pd>` in the `build/` directory.
 ```bash
 ./panda test.pd
 ```
-This command will generate a `test.asm` file. To execute it, utilize the appropriate NASM assembler commands based on your operating system. Below is an example command specifically for MacOS:
+This command will generate a `test.asm` file. To execute it, utilize the appropriate NASM assembler commands based on your operating system.\
+Below is an example command specifically for MacOS:
 ```bash
 cd ../test/outputFile
 nasm -f macho64 test.asm && ld test.o -o test -demangle -dynamic -macos_version_min 11.0 -L/usr/local/lib -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -lSystem -no_pie && ./test; echo $? 
