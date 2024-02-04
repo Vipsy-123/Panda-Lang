@@ -63,7 +63,7 @@ public:
                     exit(EXIT_FAILURE);
                 }
                 stringstream offset;
-                auto loc=(*it).stackLoc;
+                auto loc=it->stackLoc;
                 offset<<"QWORD[rsp + "<<(gen.stackSize - loc-1)*8 << "]";
                 gen.push(offset.str());
             }

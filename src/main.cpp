@@ -3,9 +3,6 @@
 void writeAsmFile(string str){
     fstream output("../test/outputFile/test.asm",ios::out);
     output<<str;
-    /* test.asm -> test.o -> test(exec) -> echo $?
-    nasm -f macho64 test.asm && ld test.o -o test -demangle -dynamic -macos_version_min 11.0 -L/usr/local/lib -syslibroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -lSystem -no_pie && ./test; echo $? 
-    */
 }
 
 int pandaCompiler(const string &fileContents){

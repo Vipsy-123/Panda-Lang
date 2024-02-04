@@ -1,7 +1,10 @@
 let:digit num1=3;
-let:digit num2=1;
-
-if(num2-1){
+let:digit num2=1;  //single-line comment
+/*  MULTI
+    lINE
+    COMMENT
+*/
+if(num2 -1){
     ret(69);
 }
 ret(1);

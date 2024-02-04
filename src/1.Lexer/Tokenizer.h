@@ -44,6 +44,14 @@ public:
                 else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();
             }
+            else if(peek()=='/' && peek(1) && peek(1)=='/'){
+                while(peek()!='\n')consume();
+                consume();
+            }
+            else if(peek()=='/' && peek(1) && peek(1)=='*'){
+                while(!(peek()=='*' && peek(1) && peek(1)=='/'))consume();
+                consume();consume();
+            }
             else if(isdigit(peek())){
                 while(peek() && isdigit(peek()))buf.push_back(consume());
                 tokens.push_back({.type=TokenType::digit,.val=buf});
