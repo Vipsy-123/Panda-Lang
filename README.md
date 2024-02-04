@@ -1,7 +1,5 @@
 # Panda Lang
 
-## About
-
 Panda is a statically typed, compiled programming language that aims to balance simplicity and power. It was created with the following principles in mind:
 
 
@@ -11,38 +9,37 @@ Panda is a statically typed, compiled programming language that aims to balance 
 
 ### 1. Variables
 
-Variables are declared using the `var` keyword
+Variables are declared using the `let` keyword
 
 ```python
-var: String a = 2;
+digit x = 2;
 ```
 
 ### 2. Data Types
 
-Alox supports two datatypes: Number and String
+Panda supports two datatypes: digit and string. String implementation is currently under devleopment.
 
 ```python
-var: String name = "John"
-var: Number age = 30
+digit number = 27; 
+string name = "Vishal"
 ```
 
 ### 3. Conditional Statements
 
-You can use `if`, `else if`, and `else` for conditional branching.
+You can use `if` and `else` for conditional branching.
 
 ```python
 if(condition){
- //do something
+    //do something
 }
 else{
-//do something
-
+    //do something
 }
 ```
 
 ### 4. Loops
 
-Alox offers both `for` and `while` loops.
+panda offers both `for` and `while` loops.
 
 #### For Loop
 
@@ -56,7 +53,7 @@ for(var: Number i = 0; i<10; i = i +1 ){
 
 ```python
 while(1){
-    print 1;
+    #code block
 }
     # code block
 ```
@@ -66,27 +63,12 @@ while(1){
 Define functions using the `func` keyword. You can specify parameters and return types.
 
 ```python
-fun add(var: Number x, var: Number y){
-    return x + y
+digit add(digit x, digit y){
+    return x + y;
 }
 ```
 
-### 6. Arrays and Lists
+### 6. Vectors and Map
 
-Create arrays and lists to store collections of data.
-Feature currently under development
-
-### 7. Object-Oriented Programming
-
-Feature currently under development
-
-### 8. Exception Handling
-
-Use `try`, `catch`, and `throw` for exception handling.
-Feature currently under development
-
-
-### 10. Modules and Libraries
-
-Import and use external modules and libraries to extend Alox's functionality.
+Create vectors and map to store collections of data.
 Feature currently under development
