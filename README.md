@@ -2,14 +2,11 @@
 
 Panda is a statically typed, compiled programming language that aims to balance simplicity and power. It was created with the following principles in mind:
 
-
-## Features
-
 ## Tour of the Language
 
 ### 1. Variables
 
-Variables are declared using the `let :` keyword followed by its data type.
+Variables are declared using the `let:` keyword followed by its data type.
 
 ```python
 let: digit x = 2;

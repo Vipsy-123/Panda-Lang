@@ -37,9 +37,9 @@ public:
 
         while(peek()){
             if(isalpha(peek())){
-                while(peek() && isalnum(peek()))buf.push_back(consume());
+                while(peek() && (isalnum(peek())||peek()==':'))buf.push_back(consume());
                 if(buf=="ret")tokens.push_back({.type=TokenType::ret});
-                else if(buf=="let")tokens.push_back({.type=TokenType::let});
+                else if(buf=="let:digit")tokens.push_back({.type=TokenType::let});
                 else if(buf=="if")tokens.push_back({.type=TokenType::if_});
                 else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();

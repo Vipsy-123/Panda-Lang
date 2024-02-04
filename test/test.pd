@@ -1,6 +1,7 @@
-let x=3;
-let y=1;
-if(y-1){
+let:digit num1=3;
+let:digit num2=1;
+
+if(num2-1){
     ret(69);
 }
 ret(1);
