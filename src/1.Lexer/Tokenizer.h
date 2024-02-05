@@ -13,7 +13,6 @@ optional<int> binOpPrec(TokenType type){
         return{};
     }
 }
-
 class Lexer{
     size_t curIdx;
     string src;
@@ -46,12 +45,12 @@ public:
                 else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();
             }
-            else if(peek()=='/' && peek(1) && peek(1)=='/'){
+            else if(peek()=='#'){
                 while(peek()!='\n')consume();
                 consume();
             }
-            else if(peek()=='/' && peek(1) && peek(1)=='*'){
-                while(!(peek()=='*' && peek(1) && peek(1)=='/'))consume();
+            else if(peek()=='/' && peek(1) && peek(1)=='#'){
+                while(!(peek()=='#' && peek(1) && peek(1)=='/'))consume();
                 consume();consume();
             }
             else if(isdigit(peek())){
