@@ -14,5 +14,7 @@ enum class TokenType{
     openCurly,
     closeCurly,
     if_,
+    elif,
+    else_,
 };
 

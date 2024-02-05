@@ -41,6 +41,8 @@ public:
                 if(buf=="ret")tokens.push_back({.type=TokenType::ret});
                 else if(buf=="let:digit")tokens.push_back({.type=TokenType::let});
                 else if(buf=="if")tokens.push_back({.type=TokenType::if_});
+                else if(buf=="elif")tokens.push_back({.type=TokenType::elif});
+                else if(buf=="else")tokens.push_back({.type=TokenType::else_});
                 else tokens.push_back({.type=TokenType::ident,.val=buf});
                 buf.clear();
             }

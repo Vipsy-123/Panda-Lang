@@ -22,6 +22,7 @@ int pandaCompiler(const string &fileContents){
     string output=genrator.genProg();
 
     writeAsmFile(output);
+    cout<<"Compilation Complete!\n";
     return EXIT_SUCCESS;
 }
 

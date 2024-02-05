@@ -1,9 +1,15 @@
+//I'll change this to md format soon.
+
 [Prog]      ->[Stmts]*
 
 [Stmts]     ->[let indent =[Expr]];
             ->[exit([Expr])];
             ->[Scope]
-            ->if([Expr])[Scope]
+            ->if([Expr])[Scope][IfPred]
+
+[IfPred]    ->elfi([Expr])[Scope][IfPred]
+            ->else[Scope]
+            ->'\0'  //empty
 
 [Scope]     ->{[Stmts]}
 
