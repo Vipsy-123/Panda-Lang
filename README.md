@@ -27,7 +27,7 @@ nasm -f macho64 test.asm && ld test.o -o test -demangle -dynamic -macos_version_
 
 
 
-## Exmaple of panda.pd
+## Example of panda.pd
 
 ```python
 let: digit num1 = 27; 
