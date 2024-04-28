@@ -1,0 +1,27 @@
+[Prog]   ==> [Stmt]*
+
+[Stmt]  ==> exit([Expr]);
+        ==> let ident = [Expr];
+        ==> ident = [Expr];
+        ==> if([Expr])[Scope][IfPred] 
+        ==> [Scope]
+        ==> print([String]);
+        
+[String] ==> " .... "
+
+[Expr]   ==> [Term]
+         ==> [NodeBinExpr]
+
+[Scope]  ==> {[Stmts]*}  
+
+[IfPred] ==> elif([Expr])[Scope][IfPred]
+         ==> else[Scope] 
+         ==> ε
+
+[NodeBinExpr] ==> [Expr] + [Expr] ; (prec = 0)
+              ==> [Expr] - [Expr] ; (prec = 0)
+              ==> [Expr] * [Expr] ; (prec = 1)
+              ==> [Expr] / [Expr] ; (prec = 1)
+              
+[Term]   ==> int_lit
+         ==> ident

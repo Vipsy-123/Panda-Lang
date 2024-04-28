@@ -1,18 +1,16 @@
-#include<iostream>
-#include<vector>
-#include<fstream>
-#include<sstream>
-#include<unordered_map>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <optional>
+#include <variant>
+#include <string>
+#include <stdexcept>
+#include <map>
+#include <cassert>
+#include <algorithm>
+#include "tokenizer.hpp"
+#include "parser.hpp"
+#include "generator.hpp"
 
-using namespace std;
 
-#include"../src/0.Read Panda File/ReadFile.h"
-
-#include"../src/1.Lexer/TokenType.h"
-#include"../src/1.Lexer/Tokenizer.h"
-
-#include"../src/2.Parser/Arena.h"
-#include"../src/2.Parser/ASTNode.h"
-#include"../src/2.Parser/parser.h"
-
-#include"../src/3.CodeGenration/Genrator.h"
