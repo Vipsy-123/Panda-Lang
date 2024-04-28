@@ -104,6 +104,7 @@ Before running the Panda-Lang Compiler, ensure you have the following installed:
    ```bash
     git clone https://github.com/Vipsy-123/Panda-Lang.git
    ```
+
 2. Navigate to the project build directory:
    ```bash
     cd Panda-Lang/build
@@ -112,11 +113,18 @@ Before running the Panda-Lang Compiler, ensure you have the following installed:
    ```bash
     make
    ```
-4. Run the compiler for your Panda program:
+4. If make is not working remove and run cmake again
+   ```bash
+        rm -f build
+        mkdir build
+        cmake -S . -B build/
+        make
+   ```
+5. Run the compiler for your Panda program:
     ```bash
       ./panda ../test.pd
     ```
-5. Execute the compiled program:
+6. Execute the compiled program:
     ```bash
       ./out
     ```
