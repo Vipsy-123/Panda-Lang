@@ -109,21 +109,25 @@ Before running the Panda-Lang Compiler, ensure you have the following installed:
    ```bash
     cd Panda-Lang/build
    ```
+   
 3. Compile the compiler:
    ```bash
     make
    ```
+   
 4. If make is not working remove and run cmake again
    ```bash
-        rm -f build
-        mkdir build
-        cmake -S . -B build/
-        make
+    rm -f build
+    mkdir build
+    cmake -S . -B build/
+    make
    ```
+   
 5. Run the compiler for your Panda program:
     ```bash
       ./panda ../test.pd
     ```
+    
 6. Execute the compiled program:
     ```bash
       ./out
