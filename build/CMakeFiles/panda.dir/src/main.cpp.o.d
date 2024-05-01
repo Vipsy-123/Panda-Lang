@@ -1,7 +1,7 @@
 CMakeFiles/panda.dir/src/main.cpp.o: \
- /home/vipsy/Vipul/panda-Compiler/panda/src/main.cpp \
+ /home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/main.cpp \
  /usr/include/stdc-predef.h \
- /home/vipsy/Vipul/panda-Compiler/panda/src/compilerLib.h \
+ /home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/compilerLib.h \
  /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -190,9 +190,9 @@ CMakeFiles/panda.dir/src/main.cpp.o: \
  /usr/include/c++/11/bits/hashtable_policy.h \
  /usr/include/c++/11/bits/unordered_map.h \
  /usr/include/c++/11/pstl/execution_defs.h \
- /home/vipsy/Vipul/panda-Compiler/panda/src/tokenizer.hpp \
- /home/vipsy/Vipul/panda-Compiler/panda/src/parser.hpp \
- /home/vipsy/Vipul/panda-Compiler/panda/src/arena.hpp \
+ /home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/tokenizer.hpp \
+ /home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/parser.hpp \
+ /home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/arena.hpp \
  /usr/include/c++/11/cstddef /usr/include/c++/11/memory \
  /usr/include/c++/11/bits/stl_raw_storage_iter.h \
  /usr/include/c++/11/bits/align.h /usr/include/c++/11/bit \
@@ -229,4 +229,4 @@ CMakeFiles/panda.dir/src/main.cpp.o: \
  /usr/include/c++/11/bits/ranges_uninitialized.h \
  /usr/include/c++/11/bits/uses_allocator_args.h \
  /usr/include/c++/11/pstl/glue_memory_defs.h \
- /home/vipsy/Vipul/panda-Compiler/panda/src/generator.hpp
+ /home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/generator.hpp

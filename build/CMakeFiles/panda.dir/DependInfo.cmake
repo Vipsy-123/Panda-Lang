@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/vipsy/Vipul/panda-Compiler/panda/src/main.cpp" "CMakeFiles/panda.dir/src/main.cpp.o" "gcc" "CMakeFiles/panda.dir/src/main.cpp.o.d"
+  "/home/vipsy/Vipul/panda-Compiler/panda/Panda-Lang/src/main.cpp" "CMakeFiles/panda.dir/src/main.cpp.o" "gcc" "CMakeFiles/panda.dir/src/main.cpp.o.d"
   )
 
 # Targets to which this target links.
